@@ -76,8 +76,11 @@ namespace costmap_node_manager
         /**
          * Start of variable section
         */
-        std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros_;
-        std::unique_ptr<nav2_util::NodeThread> costmap_thread_;
+        std::shared_ptr<nav2_costmap_2d::Costmap2DROS> local_costmap_ros_;
+        std::unique_ptr<nav2_util::NodeThread> local_costmap_thread_;
+
+        std::shared_ptr<nav2_costmap_2d::Costmap2DROS> global_costmap_ros_;
+        std::unique_ptr<nav2_util::NodeThread> global_costmap_thread_;
     };
 }
 #endif // COSTMAP_NODE_MANAGER_HPP_
