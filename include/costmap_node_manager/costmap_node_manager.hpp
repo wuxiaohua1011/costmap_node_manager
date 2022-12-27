@@ -12,11 +12,13 @@
 
 #include "nav2_util/lifecycle_node.hpp"
 #include "nav2_costmap_2d/costmap_2d_ros.hpp"
+#include "sensor_msgs/msg/laser_scan.hpp"
 #ifndef COSTMAP_NODE_MANAGER_HPP_
 #define COSTMAP_NODE_MANAGER_HPP_
 
 namespace costmap_node_manager
 {
+    
     class CostmapNodeManager : public nav2_util::LifecycleNode
     {
     public:
@@ -74,13 +76,19 @@ namespace costmap_node_manager
         nav2_util::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &state) override;
 
         /**
-         * Start of variable section
+         * @brief Automatic start callback
+         * @param msg the message to listen to
         */
+        void auto_start_msg_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg);
+        /**
+         * Start of variable section
+         */
         std::shared_ptr<nav2_costmap_2d::Costmap2DROS> local_costmap_ros_;
         std::unique_ptr<nav2_util::NodeThread> local_costmap_thread_;
 
         std::shared_ptr<nav2_costmap_2d::Costmap2DROS> global_costmap_ros_;
         std::unique_ptr<nav2_util::NodeThread> global_costmap_thread_;
+        rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr sensor_msg_sub_;
     };
 }
 #endif // COSTMAP_NODE_MANAGER_HPP_

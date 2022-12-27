@@ -14,6 +14,7 @@ find_package(nav2_msgs REQUIRED)
 find_package(nav_2d_utils REQUIRED)
 find_package(nav_2d_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 include_directories(
   include
