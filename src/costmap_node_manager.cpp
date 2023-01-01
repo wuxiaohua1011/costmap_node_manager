@@ -19,14 +19,6 @@ namespace costmap_node_manager
     global_costmap_ros_ = std::make_shared<nav2_costmap_2d::Costmap2DROS>(
         "global_costmap", std::string{get_namespace()}, "global_costmap");
     global_costmap_thread_ = std::make_unique<nav2_util::NodeThread>(global_costmap_ros_);
-
-    // auto start topic monitor
-    this->declare_parameter("auto_start_trigger_topic", "/carla/ego_vehicle/laserscan");
-    std::string auto_start_topic =
-        this->get_parameter("auto_start_trigger_topic").get_parameter_value().get<std::string>();
-    RCLCPP_INFO(get_logger(), "Listening to [%s] for automatic configuration and activate", auto_start_topic.c_str());
-    sensor_msg_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
-        auto_start_topic.c_str(), rclcpp::QoS(5).best_effort().keep_last(5).durability_volatile(), std::bind(&CostmapNodeManager::auto_start_msg_callback, this, _1));
   }
 
   CostmapNodeManager::~CostmapNodeManager()
@@ -34,27 +26,6 @@ namespace costmap_node_manager
     RCLCPP_INFO(get_logger(), "Destroying ROS2Costmap2DNode");
     local_costmap_thread_.reset();
     global_costmap_thread_.reset();
-  }
-
-  void CostmapNodeManager::auto_start_msg_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
-  {
-    RCLCPP_DEBUG(get_logger(), "Sensor msg received, configuring costmap");
-    // TODO: also check for transform from global map's robot_base_frame to global_frame
-    
-    // unconfigured -> configured
-    if (this->local_costmap_ros_->get_current_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_UNCONFIGURED) {
-      this->local_costmap_ros_->configure();
-    }
-    if (this->global_costmap_ros_->get_current_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_UNCONFIGURED) {
-      this->global_costmap_ros_->configure();
-    }
-    // inactive -> active
-    if (this->local_costmap_ros_->get_current_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE) {
-      this->local_costmap_ros_->activate();
-    }
-    if (this->global_costmap_ros_->get_current_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE) {
-      this->global_costmap_ros_->activate();
-    }
   }
 
   nav2_util::CallbackReturn
