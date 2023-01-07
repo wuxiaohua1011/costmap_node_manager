@@ -1,3 +1,7 @@
+// Copyright 2023 michael. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 #include "costmap_node_manager/costmap_node_manager.hpp"
 #include "nav2_util/node_utils.hpp"
 #include "rclcpp/qos.hpp"
