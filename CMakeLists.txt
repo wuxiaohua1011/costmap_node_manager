@@ -1,7 +1,3 @@
-// Copyright 2023 michael. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 cmake_minimum_required(VERSION 3.5)
 project(costmap_node_manager)
 
@@ -38,7 +34,6 @@ ament_target_dependencies(costmap_node_manager
   ${dependencies}
 )
 
-
 target_include_directories(costmap_node_manager PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
@@ -48,6 +43,5 @@ install(TARGETS costmap_node_manager
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
-  
 
 ament_package()
